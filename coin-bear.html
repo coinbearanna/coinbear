@@ -1,279 +1,164 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>דוב המטבעות — מעקב קינוחים</title>
+<title>דוב המטבעות — גרסת מובייל (ללא אחסון מקומי)</title>
 <style>
-  :root{
-    --bg:#0f172a;
-    --card:#111827;
-    --ink:#e5e7eb;
-    --muted:#94a3b8;
-    --accent:#fbbf24;
-    --good:#22c55e;
-    --bad:#ef4444;
-    --btn:#1f2937;
-  }
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,#0b1223,#0f172a);font-family:system-ui,-apple-system,Segoe UI,Roboto,Heebo,Arial,sans-serif;color:var(--ink);}
-  .wrap{max-width:860px;margin:0 auto;padding:24px;}
-  header{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-  .bear{
-    font-size:56px; line-height:1; filter: drop-shadow(0 6px 16px rgba(0,0,0,.35));
-  }
-  .title{font-weight:800;font-size:clamp(20px,4vw,28px);}
-  .sub{color:var(--muted);font-size:14px}
-  .card{background:rgba(17,24,39,.7);backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,.06); border-radius:16px;padding:18px}
-  .grid{display:grid;grid-template-columns: 1fr; gap:16px;}
-  @media(min-width:860px){ .grid{ grid-template-columns: 1.2fr .8fr; } }
-
-  .balance{display:flex;align-items:center;justify-content:space-between;gap:12px}
-  .stat{display:flex;gap:10px;align-items:center}
-  .stat .num{font-weight:800;font-size:30px}
-  .pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}
-  .coins{display:flex;gap:6px;align-items:flex-end;height:32px}
-  .coin{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #fff1, #0000), linear-gradient(180deg,#ffd37a,#f59e0b); border:1px solid #0005; box-shadow: 0 2px 0 #0006 inset, 0 4px 10px #0006}
-  .controls{display:flex;gap:10px;flex-wrap:wrap}
-  button{cursor:pointer;border:1px solid rgba(255,255,255,.08); background:var(--btn); color:var(--ink); padding:12px 14px;border-radius:12px;font-weight:700}
-  button.primary{background:linear-gradient(180deg,#16a34a,#15803d); border-color:#064e3b}
-  button.danger{background:linear-gradient(180deg,#b91c1c,#7f1d1d); border-color:#450a0a}
-  button.ghost{background:rgba(255,255,255,.05)}
-  .hint{color:var(--muted);font-size:13px;margin-top:8px}
-  .calendar{display:grid;grid-template-columns: repeat(14, 1fr); gap:6px;margin-top:12px}
-  .dot{aspect-ratio:1;border-radius:8px;display:grid;place-items:center;font-size:12px;border:1px solid rgba(255,255,255,.08);}
-  .dot.good{background:rgba(34,197,94,.15);color:#86efac}
-  .dot.bad{background:rgba(239,68,68,.15);color:#fecaca}
-  .dot.none{background:rgba(255,255,255,.04);color:#94a3b8}
-  .list{max-height:220px;overflow:auto; margin-top:8px}
-  .row{display:flex;justify-content:space-between;border-bottom:1px dashed rgba(255,255,255,.06);padding:8px 0;color:var(--muted)}
-  .row b{color:var(--ink)}
-  .footer{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;color:var(--muted);font-size:13px}
-  .negative{color:#fca5a5}
-  .positive{color:#86efac}
-  .toast{position:fixed;inset:auto 0 20px 0;display:grid;place-items:center;pointer-events:none}
-  .toast > div{background:#111827cc;color:#e5e7eb;border:1px solid rgba(255,255,255,.06);padding:10px 14px;border-radius:999px;opacity:0;transform:translateY(8px);transition:.25s}
-  .toast.show > div{opacity:1;transform:none}
+  :root{
+    --bg:#0f172a; --card:#111827; --ink:#e5e7eb; --muted:#94a3b8;
+    --good:#22c55e; --bad:#ef4444; --btn:#1f2937; --accent:#fbbf24;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#0b1223,#0f172a);
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Heebo,Arial,sans-serif;color:var(--ink);}
+  .wrap{max-width:720px;margin:0 auto;padding:18px}
+  header{display:flex;align-items:center;gap:12px}
+  .bear{font-size:50px;filter:drop-shadow(0 6px 16px rgba(0,0,0,.35))}
+  .title{font-weight:800;font-size:clamp(18px,4vw,26px)}
+  .sub{color:var(--muted);font-size:13px}
+  .card{background:rgba(17,24,39,.75);backdrop-filter: blur(8px); border:1px solid rgba(255,255,255,.06);
+    border-radius:16px;padding:14px;margin-top:14px}
+  .balance{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .num{font-weight:800;font-size:32px}
+  .pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+    padding:6px 10px;border-radius:999px;color:var(--muted);font-size:12px}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+  button{cursor:pointer;border:1px solid rgba(255,255,255,.08); background:var(--btn); color:var(--ink);
+    padding:14px 12px;border-radius:12px;font-weight:800;font-size:16px}
+  button.primary{background:linear-gradient(180deg,#16a34a,#15803d); border-color:#064e3b}
+  button.danger{background:linear-gradient(180deg,#b91c1c,#7f1d1d); border-color:#450a0a}
+  button.ghost{background:rgba(255,255,255,.05);grid-column: span 2}
+  .calendar{display:grid;grid-template-columns: repeat(7, 1fr); gap:6px;margin-top:10px}
+  .dot{aspect-ratio:1;border-radius:10px;display:grid;place-items:center;font-size:14px;
+    border:1px solid rgba(255,255,255,.08);}
+  .dot.good{background:rgba(34,197,94,.15);color:#86efac}
+  .dot.bad{background:rgba(239,68,68,.15);color:#fecaca}
+  .dot.none{background:rgba(255,255,255,.04);color:#94a3b8}
+  .hint{color:var(--muted);font-size:13px;margin-top:6px}
+  .footer{margin-top:10px;color:var(--muted);font-size:12px}
+  .toast{position:fixed;inset:auto 0 18px 0;display:grid;place-items:center;pointer-events:none}
+  .toast > div{background:#111827cc;color:#e5e7eb;border:1px solid rgba(255,255,255,.06);padding:10px 14px;border-radius:999px;opacity:0;transform:translateY(8px);transition:.25s}
+  .toast.show > div{opacity:1;transform:none}
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="bear" aria-hidden="true">🐻‍❄️🪙</div>
-      <div>
-        <div class="title">דוב המטבעות — מעקב קינוחים</div>
-        <div class="sub">מסמנים כל יום: <b>בלי קינוח = +1 מטבע</b> · <b>עם קינוח = −1 מטבע</b>. נשמר אוטומטית בדפדפן שלך.</div>
-      </div>
-    </header>
+<div class="wrap">
+  <header>
+    <div class="bear">🐻‍❄️🪙</div>
+    <div>
+      <div class="title">דוב המטבעות — מובייל</div>
+      <div class="sub">הכל נשמר בכתובת (URL). הוסיפי למסך הבית לשמירה קלה.</div>
+    </div>
+  </header>
 
-    <div class="grid" style="margin-top:18px">
-      <section class="card">
-        <div class="balance">
-          <div class="stat">
-            <span class="num" id="balance">0</span>
-            <span>מטבעות</span>
-          </div>
-          <div class="pill" id="streakPill">רצף בלי קינוח: 0 ימים</div>
-        </div>
+  <section class="card">
+    <div class="balance">
+      <div><span class="num" id="balance">0</span> מטבעות</div>
+      <div class="pill" id="streak">רצף: 0</div>
+    </div>
+    <div class="controls">
+      <button class="primary" id="btnGood">לא אכלתי קינוח (+1)</button>
+      <button class="danger" id="btnBad">אכלתי קינוח (−1)</button>
+      <button class="ghost" id="btnUndo">בטלי פעולה אחרונה ↩︎</button>
+      <button class="ghost" id="btnShare">שמרי קיצור דרך/שיתוף</button>
+    </div>
+    <div class="hint" id="todayHint"></div>
+    <div class="calendar" id="calendar"></div>
+    <div class="footer" id="footer"></div>
+  </section>
+</div>
 
-        <div class="coins" id="coins" aria-hidden="true"></div>
-
-        <div class="controls" style="margin:14px 0">
-          <button class="primary" id="btnGood">לא אכלתי קינוח 🍏 (+1)</button>
-          <button class="danger" id="btnBad">אכלתי קינוח 🍰 (−1)</button>
-          <button class="ghost" id="btnUndo">בטלי פעולה אחרונה ↩︎</button>
-          <button class="ghost" id="btnReset">איפוס</button>
-        </div>
-        <div class="hint" id="todayHint"></div>
-
-        <div class="calendar" id="calendar" aria-label="14 הימים האחרונים"></div>
-      </section>
-
-      <aside class="card">
-        <div class="title" style="font-size:18px;margin-bottom:8px">היסטוריה</div>
-        <div class="list" id="history"></div>
-        <div class="footer">
-          <span>סה״כ ימים מתועדים: <b id="totalDays">0</b></span>·
-          <span>ימים ללא קינוח: <b id="goodDays">0</b></span>·
-          <span>ימים עם קינוח: <b id="badDays">0</b></span>
-        </div>
-      </aside>
-    </div>
-  </div>
-
-  <div class="toast" id="toast"><div id="toastMsg">עודכן</div></div>
+<div class="toast" id="toast"><div id="toastMsg">עודכן</div></div>
 
 <script>
 (function(){
-  const $ = s => document.querySelector(s);
-  const $$ = s => document.querySelectorAll(s);
-  const stateKey = "coinBear.v1";
-
-  const todayIso = () => {
-    const d = new Date();
-    d.setHours(0,0,0,0);
-    return d.toISOString().slice(0,10);
-  };
-
-  let state = {
-    balance: 0,
-    streak: 0,
-    logs: [] // {date:'YYYY-MM-DD', val: +1|-1}
-  };
-
-  // Load
-  try {
-    const raw = localStorage.getItem(stateKey);
-    if(raw) state = JSON.parse(raw);
-  } catch(e){ console.warn(e); }
-
-  const save = () => localStorage.setItem(stateKey, JSON.stringify(state));
-
-  const formatDate = iso => {
-    const d = new Date(iso);
-    return d.toLocaleDateString('he-IL', {weekday:'short', day:'2-digit', month:'2-digit'});
-  };
-
-  const toast = (msg) => {
-    const t = $("#toast");
-    $("#toastMsg").textContent = msg;
-    t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"), 1400);
-  };
-
-  const render = () => {
-    // Balance + coins
-    $("#balance").textContent = state.balance;
-    $("#streakPill").textContent = `רצף בלי קינוח: ${state.streak} ימים`;
-
-    const coinWrap = $("#coins");
-    coinWrap.innerHTML = "";
-    const coinCount = Math.max(0, Math.min(12, state.balance)); // cap visual
-    for(let i=0;i<coinCount;i++){
-      const c = document.createElement("div");
-      c.className = "coin";
-      c.style.height = 14 + (i%5)*2 + "px";
-      coinWrap.appendChild(c);
-    }
-
-    // Today hint
-    const today = todayIso();
-    const todayLog = state.logs.find(l => l.date === today);
-    $("#todayHint").textContent = todayLog
-      ? `היום כבר סומן: ${todayLog.val > 0 ? "בלי קינוח (+1)" : "עם קינוח (−1)"} — ניתן לעדכן מחדש.`
-      : "עוד לא סימנת את היום.";
-
-    // History counters
-    $("#totalDays").textContent = state.logs.length;
-    $("#goodDays").textContent = state.logs.filter(l => l.val > 0).length;
-    $("#badDays").textContent  = state.logs.filter(l => l.val < 0).length;
-
-    // History list
-    const hist = $("#history");
-    hist.innerHTML = "";
-    state.logs.slice().reverse().forEach(l => {
-      const row = document.createElement("div");
-      row.className = "row";
-      row.innerHTML = `<b>${formatDate(l.date)}</b>
-        <span class="${l.val>0?'positive':'negative'}">${l.val>0?'+1':'−1'} מטבע</span>`;
-      hist.appendChild(row);
-    });
-
-    // Calendar last 14
-    const cal = $("#calendar");
-    cal.innerHTML = "";
-    for(let i=13;i>=0;i--){
-      const d = new Date();
-      d.setDate(d.getDate()-i);
-      const iso = d.toISOString().slice(0,10);
-      const log = state.logs.find(x => x.date === iso);
-      const el = document.createElement("div");
-      el.className = "dot " + (log ? (log.val>0?'good':'bad') : 'none');
-      el.title = formatDate(iso) + (log ? (log.val>0 ? " • בלי קינוח (+1)" : " • עם קינוח (−1)") : " • בלי סימון");
-      el.textContent = log ? (log.val>0?'✓':'×') : '·';
-      cal.appendChild(el);
-    }
-  };
-
-  const setToday = (val) => {
-    const iso = todayIso();
-    const idx = state.logs.findIndex(l => l.date === iso);
-    // Adjust balance/streak relative to previous today value (if any)
-    if(idx >= 0){
-      // revert previous
-      const prev = state.logs[idx].val;
-      state.balance -= prev;
-      if(prev > 0){ state.streak = 0; } // rollback streak approximated by resetting; recompute below
-      state.logs.splice(idx,1);
-    }
-    state.logs.push({date: iso, val});
-    state.balance += val;
-
-    // recompute streak: count consecutive +1 from most recent backwards
-    state.streak = 0;
-    const sorted = state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date));
-    for(let i=sorted.length-1;i>=0;i--){
-      if(sorted[i].val > 0){
-        // check if consecutive dates
-        if(i === sorted.length-1){
-          state.streak = 1;
-        } else {
-          const d1 = new Date(sorted[i].date);
-          const d2 = new Date(sorted[i+1].date);
-          const diff = (d2 - d1) / (1000*60*60*24);
-          if(diff === 1 && sorted[i+1].val > 0){
-            state.streak++;
-          } else if(sorted[i].date === todayIso() && sorted[i].val>0 && diff >= 1){
-            // if last entry is today positive but not continuous,
-            // streak should be 1
-            state.streak = 1;
-          } else {
-            break;
-          }
-        }
-      } else {
-        if(sorted[i].date === todayIso() && sorted[i].val>0){
-          state.streak = 1;
-        }
-        break;
-      }
-    }
-    save(); render();
-    toast(val>0 ? "כל הכבוד! דוב המטבעות קיבל +1 🪙" : "סימנת קינוח — ירד מטבע אחד 🪙");
-  };
-
-  // Buttons
-  $("#btnGood").addEventListener("click", ()=> setToday(+1));
-  $("#btnBad").addEventListener("click", ()=> setToday(-1));
-  $("#btnUndo").addEventListener("click", ()=>{
-    if(!state.logs.length) return;
-    const last = state.logs.pop();
-    state.balance -= last.val;
-    // recompute streak
-    state.streak = 0;
-    const sorted = state.logs.slice().sort((a,b)=>a.date.localeCompare(b.date));
-    for(let i=sorted.length-1;i>=0;i--){
-      if(sorted[i].val>0){
-        if(i === sorted.length-1){ state.streak = 1; }
-        else {
-          const d1 = new Date(sorted[i].date);
-          const d2 = new Date(sorted[i+1].date);
-          const diff = (d2 - d1) / (1000*60*60*24);
-          if(diff === 1 && sorted[i+1].val>0){ state.streak++; } else break;
-        }
-      } else break;
-    }
-    save(); render();
-    toast("הפעולה האחרונה בוטלה");
-  });
-  $("#btnReset").addEventListener("click", ()=>{
-    if(confirm("לאפס את דוב המטבעות? הפעולה תמחק את ההיסטוריה המקומית.")){
-      state = {balance:0, streak:0, logs:[]}; save(); render();
-      toast("אופס! התחלנו מחדש 🐻");
-    }
-  });
-
-  render();
+  const $ = s => document.querySelector(s);
+  const todayIso = () => { const d=new Date(); d.setHours(0,0,0,0); return d.toISOString().slice(0,10); };
+  // State in localStorage
+  function getState(){
+    const h = localStorage.getItem('coin_bear_state');
+    if(!h) return {balance:0, logs:[]};
+    try { return JSON.parse(h); } catch(e){ return {balance:0, logs:[]}; }
+  }
+  function setState(s, toastMsg){
+    const minimal = {...s};
+    if(minimal.logs.length>120) minimal.logs = minimal.logs.slice(minimal.logs.length-120);
+    localStorage.setItem('coin_bear_state', JSON.stringify(minimal));
+    render();
+    if(toastMsg) toast(toastMsg);
+  }
+  function toast(msg){
+    const t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 1400);
+  }
+  function computeStreak(logs){
+    const byDate = logs.slice().sort((a,b)=>a.date.localeCompare(b.date));
+    let streak = 0;
+    for(let i=byDate.length-1;i>=0;i--){
+      if(byDate[i].val <= 0) break;
+      const lastDate = new Date(byDate[i+1]?.date || '2050-01-01');
+      const currentDate = new Date(byDate[i].date);
+      if(i === byDate.length - 1 || (lastDate - currentDate === 86400000)) {
+        streak++;
+      } else if (lastDate - currentDate > 86400000) {
+        break;
+      }
+    }
+    return streak;
+  }
+  function render(){
+    const st = getState();
+    document.getElementById('balance').textContent = st.balance;
+    document.getElementById('streak').textContent = 'רצף: ' + computeStreak(st.logs);
+    const today = todayIso();
+    const tLog = st.logs.find(l => l.date === today);
+    document.getElementById('todayHint').textContent = tLog
+      ? `היום מסומן: ${tLog.val>0?'בלי קינוח (+1)':'עם קינוח (−1)'}`
+      : 'עוד לא סימנת את היום';
+    const cal = document.getElementById('calendar'); cal.innerHTML='';
+    for(let i=13;i>=0;i--){
+      const d = new Date(); d.setDate(d.getDate()-i);
+      const iso = d.toISOString().slice(0,10);
+      const log = st.logs.find(x=>x.date===iso);
+      const el = document.createElement('div');
+      el.className = 'dot ' + (log ? (log.val>0?'good':'bad') : 'none');
+      el.textContent = log ? (log.val>0?'✓':'×') : '·';
+      cal.appendChild(el);
+    }
+    document.getElementById('footer').textContent =
+      `ימים מתועדים: ${st.logs.length} • בלי קינוח: ${st.logs.filter(l=>l.val>0).length} • עם קינוח: ${st.logs.filter(l=>l.val<0).length}`;
+  }
+  function setToday(val){
+    const st = getState();
+    const iso = todayIso();
+    const idx = st.logs.findIndex(l => l.date===iso);
+    if(idx>=0){ st.balance -= st.logs[idx].val; st.logs.splice(idx,1); }
+    st.logs.push({date: iso, val});
+    st.balance += val;
+    setState(st, val>0 ? "כל הכבוד! +1 מטבע" : "סומן קינוח — −1 מטבע");
+  }
+  document.getElementById('btnGood').addEventListener('click', ()=>setToday(+1));
+  document.getElementById('btnBad').addEventListener('click',  ()=>setToday(-1));
+  document.getElementById('btnUndo').addEventListener('click', ()=>{
+    const st = getState();
+    if(!st.logs.length) return;
+    const last = st.logs.pop();
+    st.balance -= last.val;
+    setState(st, "בוטל");
+  });
+  document.getElementById('btnShare').addEventListener('click', async ()=>{
+    const url = location.href;
+    try{
+      if(navigator.share){
+        await navigator.share({title:"דוב המטבעות", url});
+      } else {
+        await navigator.clipboard.writeText(url);
+        toast("הלינק הועתק — הוסיפי למסך הבית");
+      }
+    }catch(e){ console.log(e); }
+  });
+  render();
 })();
 </script>
 </body>
