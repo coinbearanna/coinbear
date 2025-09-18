@@ -117,7 +117,7 @@
     const today = todayIso();
     const tLog = st.logs.find(l => l.date === today);
     document.getElementById('todayHint').textContent = tLog
-‎      ? `היום מסומן: ${tLog.val>0?'בלי קינוח (+1)':'עם קינוח (−1)'}`
+‎      ? ⁠ היום מסומן: ${tLog.val>0?'בלי קינוח (+1)':'עם קינוח (−1)'} ⁠
 ‎      : 'עוד לא סימנת את היום';
 
     const cal = document.getElementById('calendar'); cal.innerHTML='';
@@ -132,7 +132,7 @@
     }
 
     document.getElementById('footer').textContent =
-‎      `ימים מתועדים: ${st.logs.length} • בלי קינוח: ${st.logs.filter(l=>l.val>0).length} • עם קינוח: ${st.logs.filter(l=>l.val<0).length}`;
+‎      ⁠ ימים מתועדים: ${st.logs.length} • בלי קינוח: ${st.logs.filter(l=>l.val>0).length} • עם קינוח: ${st.logs.filter(l=>l.val<0).length} ⁠;
   }
 
   function setToday(val){
